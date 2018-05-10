@@ -2,6 +2,8 @@
     include vcs.h
     include macro.h
 
+
+
     SEG
     ORG $F000
 
