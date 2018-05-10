@@ -14,7 +14,6 @@ CLEAR
     INX
     BNE CLEAR
 
-
 StartofFrame
 
     LDA #0
