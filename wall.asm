@@ -1,0 +1,128 @@
+    PROCESSOR 6502
+    INCLUDE "vcs.h"
+    INCLUDE "macro.h"
+
+    SEG
+    ORG $F000
+
+RESET
+
+    LDX #0
+    LDA #0
+
+CLEAR
+    STA 0,X
+    INX
+    BNE CLEAR
+
+    LDA #$45
+    STA COLUPF
+
+    LDA #%00000001
+    STA CTRLPF
+
+STARTOFFRAME
+    LDA #0
+    STA VBLANK
+
+    LDA #2
+    STA VSYNC
+
+    STA WSYNC
+    STA WSYNC
+    STA WSYNC
+    
+    LDA #0
+    STA VSYNC
+
+    LDX #0
+
+VERTICALBLANK
+    STA WSYNC
+    INX
+    CPX #37
+    BNE VERTICALBLANK
+
+    LDX #0
+
+    LDA #%11111111
+    STA PF0
+    STA PF1
+    STA PF2
+
+TOP8LINES
+    STA WSYNC
+    INX
+    CPX #8
+    BNE TOP8LINES
+ 
+    LDA #%10010000
+    STA PF0
+   
+    LDA #0
+    STA PF1
+    STA PF2
+    LDX #0
+
+MIDDLINELINES
+    STA WSYNC
+    INX
+    CPX #100
+    BNE MIDDLINELINES
+
+    LDA #%00010000
+    STA PF0
+
+    LDX #0
+
+MIDDLINELINES2
+    STA WSYNC
+    INX
+    CPX #40
+    BNE MIDDLINELINES2    
+    
+    LDA #%10010000
+    STA PF0
+
+    LDX #0
+
+MIDDLINELINES3
+    STA WSYNC
+    INX
+    CPX #44
+    BNE MIDDLINELINES3
+
+    LDA #%11111111
+    STA PF0
+    STA PF1
+    STA PF2
+
+    LDX #0
+
+BOTTOM8LINES
+    STA WSYNC
+    INX
+    CPX #8
+    BNE BOTTOM8LINES
+
+    LDA #%01000010
+    STA VBLANK
+
+    LDX #0
+
+OVERSCAN
+    STA WSYNC
+    INX
+    CPX #30
+    BNE OVERSCAN
+
+    JMP STARTOFFRAME
+
+    ORG $FFFA
+
+INTERRUPTVECTORS
+    .WORD RESET
+    .WORD RESET
+    .WORD RESET
+    
+    END
